@@ -7,8 +7,8 @@ import "./styles/header.scss";
 const input = document.getElementById("input");
 const submitButton = document.getElementById("submit-button");
 
-const postTitle = async (title) => {
-  const data = { title: title };
+const postText = async (text) => {
+  const data = { text: text };
   const response = await fetch("http://localhost:8081/", {
     method: "POST",
     credentials: "same-origin",
@@ -39,7 +39,7 @@ const getNews = async () => {
 
 const handleClick = (e) => {
   e.preventDefault();
-  postTitle(input.value).then(getNews());
+  postText(input.value).then(getNews());
 };
 
 submitButton.addEventListener("click", (e) => handleClick(e));

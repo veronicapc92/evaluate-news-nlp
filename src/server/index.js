@@ -15,6 +15,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const axios = require("axios");
+const CircularJSON = require("circular-json");
 
 app.use(express.static("dist"));
 
@@ -32,7 +33,10 @@ async function getAnalysis(text) {
 
 app.get("/all", function (req, res) {
   getAnalysis(projectData.text)
-    .then((response) => res.send(response))
+    .then((response) => {
+      resData = CircularJSON.stringify(response);
+      res.send(JSON.parse(resData));
+    })
     .catch((error) => console.log("error", error));
 });
 

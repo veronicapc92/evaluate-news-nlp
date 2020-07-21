@@ -3,43 +3,24 @@ import "./styles/base.scss";
 import "./styles/footer.scss";
 import "./styles/form.scss";
 import "./styles/header.scss";
+import { postText } from "./js/postText";
+import { getAnalysis } from "./js/getAnalysis";
+import { updateUI } from "./js/updateUI";
 
 const input = document.getElementById("input");
 const submitButton = document.getElementById("submit-button");
+const resultsContainer = document.getElementById("results");
 
-const postText = async (text) => {
-  const data = { text: text };
-  const response = await fetch("http://localhost:8081/all", {
-    method: "POST",
-    credentials: "same-origin",
-    headers: { "Content-type": "application/json" },
-    body: JSON.stringify(data),
-  });
+// Creating the results paragraph and appending it to the results container
+const paragraph = document.createElement("P");
+resultsContainer.appendChild(paragraph);
 
-  try {
-    const newData = await response.json();
-    console.log(newData);
-    return newData;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
-const getAnalysis = async () => {
-  const response = await fetch("http://localhost:8081/all");
-
-  try {
-    const newData = await response.json();
-    console.log(newData);
-    return newData;
-  } catch (error) {
-    console.log("error", error);
-  }
-};
-
+// Callback function
 const handleClick = (e) => {
   e.preventDefault();
-  postText(input.value).then(getAnalysis().then((data) => console.log(data)));
+  postText(input.value).then(
+    getAnalysis().then((res) => updateUI(res.data, paragraph))
+  );
 };
 
 submitButton.addEventListener("click", (e) => handleClick(e));

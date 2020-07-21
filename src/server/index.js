@@ -1,6 +1,6 @@
 const express = require("express");
 
-let projectData = { text: "" };
+let projectData = {};
 
 const app = express();
 
@@ -14,36 +14,33 @@ app.use(cors());
 const dotenv = require("dotenv");
 dotenv.config();
 
+const axios = require("axios");
+
 app.use(express.static("dist"));
 
-function transformText(text) {
-  return text.replace(" ", "%20");
-}
-
 async function getAnalysis(text) {
-  const transformedText = transformText(text);
-  const response = await fetch(
-    `https://api.meaningcloud.com/sentiment-2.1?key=${process.env.API_KEY}&of=json&txt=${transformedText}&lang=en`
+  const response = await axios.get(
+    `https://api.meaningcloud.com/sentiment-2.1?key=${process.env.API_KEY}&of=json&txt=${text}&lang=en`
   );
 
   try {
-    const data = await response.json();
-    console.log(data);
-    return data;
+    return response;
   } catch (error) {
     console.log("error", error);
   }
 }
 
-app.get("/", function (req, res) {
-  getAnalysis(projecData.text).then((response) => res.send(response));
+app.get("/all", function (req, res) {
+  getAnalysis(projectData.text)
+    .then((response) => res.send(response))
+    .catch((error) => console.log("error", error));
 });
 
 app.listen(8081, function () {
   console.log("Example app listening on port 8081!");
 });
 
-app.post("/", function (req, res) {
-  projectData.text = req.body;
-  res.send(projectData.text);
+app.post("/all", function (req, res) {
+  projectData.text = req.body.text;
+  res.send(projectData);
 });

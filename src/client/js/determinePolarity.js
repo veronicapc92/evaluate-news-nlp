@@ -1,7 +1,7 @@
 export const determinePolarity = (data) => {
   let polarity;
   switch (data.score_tag) {
-    case "+P":
+    case "P+":
       polarity = "strongly positive";
       break;
     case "P":

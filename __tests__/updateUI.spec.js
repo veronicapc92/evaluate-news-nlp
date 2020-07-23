@@ -6,9 +6,7 @@ test("Returns the right text", () => {
     subjectivity: "SUBJECTIVE",
     irony: "NONIRONIC",
   };
-  expect(
-    updateUI(object).toMatch(
-      "The text can be considered as subjective, positive and non-ironic."
-    )
+  expect(updateUI(object)).toMatch(
+    "The text can be considered as subjective, positive and non-ironic."
   );
 });
